@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>To Do User Panel</title>
+        <link rel="stylesheet" href="ToDoPanel.css">
+        <script src="https://kit.fontawesome.com/ffd1bd49a5.js" crossorigin="anonymous"></script>
+    </head>
+    <body>
+        <section id="leftPanel">
+            <p id="logo">LOGO</p>
+            <button id="new" class="actionBtn"><i class="fa-sharp fa-solid fa-plus"></i>Nowe zadanie</button>
+            <button id="active" class="actionBtn"><i class="fa-sharp fa-solid fa-list"></i>Aktywne</button>
+            <button id="done" class="actionBtn"><i class="fa-solid fa-square-check"></i>Ukończone</button>
+        </section>
+        <section id="rightPanel">
+            <div id="doneTask" style="display: none">Done</div>
+            <div id="activeTask" style="display: block"></div>
+        </section>
+        <div id="newTask" style="display: none;">
+            <p>Nowe zadanie</p>
+            <form action="">
+                <input type="text" placeholder="Tytuł" class="formElement" id="newTaskTitle">
+                <textarea name="opis" id="opis" cols="40" rows="7" placeholder="Opis"  class="formElement"></textarea>
+                <textarea name="kroki" id="kroki" cols="40" rows="7" placeholder="Lista kroków (każdy punkt zaczynaj od nowej linii)"  class="formElement"></textarea>               
+            </form>
+            <button value="Dodaj zadanie" id="submitBtn">Dodaj zadanie</button>
+        </div>
+        <script src="ToDoPanel.js"></script>
+    </body>
+</html>
