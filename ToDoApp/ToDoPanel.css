@@ -29,7 +29,16 @@ body{
 }
 
 #logo{
-    font-size: 30px;
+    font-size: 20px;
+    text-align: center;
+}
+
+#logo > img{
+    width: 60%;
+}
+
+#leftPanel > button > i{
+    color:rgb(234, 125, 0);
 }
 
 .actionBtn{
@@ -203,5 +212,17 @@ body{
 
 .editOptionsContainer > p:hover{
     background-color: rgba(234, 125, 0, 0.654);
+}
+
+.normal{
+    border-left: solid 7px #0f5800;
+}
+
+.important{
+    border-left: solid 7px #e68200;
+}
+
+.reallyImportant{
+    border-left: solid 7px #b90000;
 }
 

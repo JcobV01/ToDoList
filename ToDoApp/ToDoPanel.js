@@ -32,6 +32,7 @@ activeBtn.addEventListener('click', ()=>{
 submitBtn.addEventListener('click', ()=>{
     let newTaskBlock = document.createElement('div');
     newTaskBlock.classList.add('task');
+    newTaskBlock.classList.add('normal');
     newTaskBlock.id = "task"+i;
 
     let contentContainer = document.createElement('div');
@@ -90,26 +91,29 @@ submitBtn.addEventListener('click', ()=>{
     document.getElementById('task'+i).appendChild(editOptionsContainer);
 
     editOptionImportant.classList.add('editOptionImportant');
-    editOptionImportant.id = 'editOptionImportant'+i;
+    editOptionImportant.id = 'eOI'+i;
     editOptionImportant.innerHTML = '<i class="fa-solid fa-exclamation"></i> Ustaw jako ważne';
+    editOptionImportant.setAttribute('onclick', 'switchToImportant(event)');
 
     document.getElementById('editOptionsContainer'+i).appendChild(editOptionImportant);
 
     editOptionReallyImportant.classList.add('editOptionReallyImportant');
-    editOptionReallyImportant.id = 'editOptionReallyImportant'+i;
+    editOptionReallyImportant.id = 'eRI'+i;
     editOptionReallyImportant.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> Ustaw jako bardzo ważne';
+    editOptionReallyImportant.setAttribute('onclick', 'switchToReallyImportant(event)');
 
     document.getElementById('editOptionsContainer'+i).appendChild(editOptionReallyImportant);
 
     editOptionEdition.classList.add('editOptionEdition');
-    editOptionEdition.id = 'editOptionEdition'+i;
+    editOptionEdition.id = 'edt'+i;
     editOptionEdition.innerHTML = '<i class="fa-solid fa-pen-to-square"></i> Edytuj';
 
     document.getElementById('editOptionsContainer'+i).appendChild(editOptionEdition);
 
     editOptionRemove.classList.add('editOptionRemove');
-    editOptionRemove.id = 'editOptionRemove'+i;
+    editOptionRemove.id = 'rmv'+i;
     editOptionRemove.innerHTML = '<i class="fa-solid fa-trash"></i> Usuń';
+    editOptionRemove.setAttribute('onclick', 'removeTask(event)');
 
     document.getElementById('editOptionsContainer'+i).appendChild(editOptionRemove);
     
@@ -196,4 +200,23 @@ function moreOptions(event){
         document.querySelector('#editOptionsContainer'+ actualClickTask).style.display = 'none';
     }
 
+}
+
+function switchToImportant(event){
+    let actualClickTask = event.target.id.slice(3);
+    document.querySelector('#task'+actualClickTask).classList.remove('normal');
+    document.querySelector('#task'+actualClickTask).classList.remove('reallyImportant');
+    document.querySelector('#task'+actualClickTask).classList.add('important');
+}
+
+function switchToReallyImportant(event){
+    let actualClickTask = event.target.id.slice(3);
+    document.querySelector('#task'+actualClickTask).classList.remove('normal');
+    document.querySelector('#task'+actualClickTask).classList.remove('important');
+    document.querySelector('#task'+actualClickTask).classList.add('reallyImportant');
+}
+
+function removeTask(event){
+    let actualClickTask = event.target.id.slice(3);
+    activeTask.removeChild(document.querySelector('#task'+actualClickTask));
 }
