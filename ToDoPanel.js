@@ -34,24 +34,32 @@ submitBtn.addEventListener('click', ()=>{
     newTaskBlock.classList.add('task');
     newTaskBlock.id = "task"+i;
 
+    let contentContainer = document.createElement('div');
+    contentContainer.classList.add('contentContainer');
+    contentContainer.id = "contentContainer"+i;
+    contentContainer.style.display = 'none';
+
     let newTaskBlockFP = document.createElement('p');
     newTaskBlockFP.id = "TaskTitle"+i;
     newTaskBlockFP.classList.add('TaskTitle');
 
     let newTaskBlockSP = document.createElement('p');
     newTaskBlockSP.id = "TaskDescribe"+i;
-    newTaskBlockSP.style.display = 'none';
+    // newTaskBlockSP.style.display = 'none';
 
     
     let ListOfSteps = document.createElement('ul');
     ListOfSteps.id = 'ListOfSteps'+i;
     ListOfSteps.classList.add('ListOfSteps');
-    ListOfSteps.style.display = 'none';
+    // ListOfSteps.style.display = 'none';
     
     activeTask.appendChild(newTaskBlock);
     document.getElementById('task'+i).appendChild(newTaskBlockFP);
-    document.getElementById('task'+i).appendChild(newTaskBlockSP);
-    document.getElementById('task'+i).appendChild(ListOfSteps);
+    document.getElementById('task'+i).appendChild(contentContainer);
+
+
+    document.getElementById('contentContainer'+i).appendChild(newTaskBlockSP);
+    document.getElementById('contentContainer'+i).appendChild(ListOfSteps);
 
     document.getElementById('TaskTitle'+i).innerHTML = document.getElementById('newTaskTitle').value;
     document.getElementById('TaskDescribe'+i).innerHTML = document.getElementById('opis').value;
@@ -150,26 +158,15 @@ function showMore(event){
     let listSize = 0;
 
 
-    if(document.querySelector('#TaskDescribe'+ actualClickTask).style.display != 'block'){
-        document.querySelector('#TaskDescribe'+ actualClickTask).style.display = 'block';
-        document.querySelector('#ListOfSteps'+ actualClickTask).style.display = 'block';
-
+    if(document.querySelector('#contentContainer'+ actualClickTask).style.display != 'block'){
+        document.querySelector('#contentContainer'+ actualClickTask).style.display = 'block';
         
-
-        if(document.querySelector('#ListOfSteps'+actualClickTask).innerHTML != ''){
-            listSize = parseInt(document.querySelector('#ListOfSteps'+actualClickTask).clientHeight);
-        }
-        else{
-            listSize = 0;
-        }
-        
-        document.querySelector('#task'+actualClickTask).style.height = (document.querySelector('#task'+actualClickTask).clientHeight + (parseInt(document.querySelector('#TaskDescribe'+actualClickTask).clientHeight) + 19 + listSize + 16)) + "px";
+        document.querySelector('#task'+actualClickTask).style.height = (document.querySelector('#task'+actualClickTask).clientHeight + document.querySelector('#contentContainer'+actualClickTask).clientHeight + 16) + 'px';
     }
     else{
-        document.querySelector('#task'+actualClickTask).style.height = (document.querySelector('#task'+actualClickTask).clientHeight - (parseInt(document.querySelector('#TaskDescribe'+actualClickTask).clientHeight) + 19 + listSize + 16)) + "px";
+        document.querySelector('#task'+actualClickTask).style.height = (document.querySelector('#task'+actualClickTask).clientHeight - (document.querySelector('#contentContainer'+actualClickTask).clientHeight + 16)) + 'px';
 
-        document.querySelector('#TaskDescribe'+ actualClickTask).style.display = 'none';
-        document.querySelector('#ListOfSteps'+ actualClickTask).style.display = 'none';
+        document.querySelector('#contentContainer'+ actualClickTask).style.display = 'none';
         
     }  
 }
