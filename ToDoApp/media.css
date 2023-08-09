@@ -1,0 +1,38 @@
+@media only screen and (max-width: 1300px) {
+    #leftPanel{
+        width: 190px;
+    }
+    #rightPanel{
+        width: calc(100% - 190px);
+    }
+
+    .task{
+        width: 280px;
+    }
+}
+
+/*Zmiana liczby kolumn w zależności od szerokości ekranu*/
+/* @media only screen and (min-width: 1501px){
+    #activeTask{
+        column-count: 4;
+    }
+}
+
+
+@media only screen and (max-width: 1500px){
+    #activeTask{
+        column-count: 3;
+    }
+}
+
+@media only screen and (max-width: 1150px){
+    #activeTask{
+        column-count: 2;
+    }
+}
+
+@media only screen and (max-width: 830px){
+    #activeTask{
+        column-count: 1;
+    }
+} */

@@ -1,163 +1,99 @@
-let activeBtn = document.getElementById("active");
-let newBtn = document.getElementById("new");
-let doneBtn = document.getElementById("done");
-let submitBtn = document.getElementById("submitBtn");
-let activeTask = document.getElementById('activeTask');
-let doneTask = document.getElementById('doneTask');
-let newTaskWindow = document.getElementById('newTask');
-let i = 0;
+const activeBtn = document.getElementById("active");
+const newBtn = document.getElementById("new");
+const doneBtn = document.getElementById("done");
+const submitBtn = document.getElementById("submitBtn");
+const activeTask = document.getElementById('activeTask');
+const doneTask = document.getElementById('doneTask');
+const newTaskWindow = document.getElementById('newTask');
+const editBtn = document.getElementById('submitEditBtn');
+const editTaskWindow = document.getElementById('editTask');
 
-newBtn.addEventListener('click', ()=>{
+
+//---------------------Funckja do zamykania wybranego w argumencie okienka
+
+const closeWindow = (element) => {
+    let elementToClose = document.getElementById(element);
+
+    if(elementToClose.style.display == 'block'){
+        elementToClose.style.display = 'none'
+    }
+}
+
+newBtn.addEventListener('click', () => {
+
+    closeWindow('editTask');
+    closeWindow('newViewWindow');
+
     if(newTaskWindow.style.display != 'block'){
         newTaskWindow.style.display = 'block';
     }else{
         newTaskWindow.style.display = 'none';
-    }   
+    }  
+    document.getElementById('LeftContainerOptions').style.height = '40px'; 
+    document.getElementById('showArrow').style.transform = '';
 })
 
-doneBtn.addEventListener('click', ()=>{
+doneBtn.addEventListener('click', () => {
     if(doneTask.style.display != 'block'){
         doneTask.style.display = 'block';
         activeTask.style.display = 'none';
     }   
+    document.getElementById('LeftContainerOptions').style.height = '40px';
+
+    closeWindow('newTask');
+    closeWindow('editTask');
+    closeWindow('newViewWindow');
 })
 
-activeBtn.addEventListener('click', ()=>{
+activeBtn.addEventListener('click', () => {
     if(activeTask.style.display != 'block'){
         activeTask.style.display = 'block';
         doneTask.style.display = 'none';
     }   
+    document.getElementById('LeftContainerOptions').style.height = '40px';
 })
 
-submitBtn.addEventListener('click', ()=>{
-    let newTaskBlock = document.createElement('div');
-    newTaskBlock.classList.add('task');
-    newTaskBlock.classList.add('normal');
-    newTaskBlock.id = "task"+i;
+submitBtn.addEventListener('click', () => {
+    if(localStorage.getItem('activeView') != null && document.getElementById('newTaskTitle').value != ''){
+        let i = document.querySelectorAll('.task').length;
 
-    let contentContainer = document.createElement('div');
-    contentContainer.classList.add('contentContainer');
-    contentContainer.id = "contentContainer"+i;
-    contentContainer.style.display = 'none';
+        let output = activeTask.innerHTML;
 
-    let newTaskBlockFP = document.createElement('p');
-    newTaskBlockFP.id = "TaskTitle"+i;
-    newTaskBlockFP.classList.add('TaskTitle');
+        output += `
+                    <div class="task normal" id="task${i}" style="height: 120px;">
+                        <p id="TaskTitle${i}" class="TaskTitle">${document.getElementById('newTaskTitle').value}</p>
+                        <div class="contentContainer" id="contentContainer${i}" style="display: none;">
+                            <p id="TaskDescribe${i}" class="TaskDescribe">${document.getElementById('opis').value}</p>
+                        </div>
+                        <div class="editOptionsContainer" id="editOptionsContainer${i}" style="display: none;">
+                            <p class="editOptionImportant" id="eOI${i}" onclick="switchToImportant(event)"><i class="fa-solid fa-exclamation"></i> Ustaw jako ważne</p>
+                            <p class="editOptionReallyImportant" id="eRI${i}" onclick="switchToReallyImportant(event)"><i class="fa-solid fa-triangle-exclamation"></i> Ustaw jako bardzo ważne</p>
+                            <p class="editOptionEdition" id="edt${i}" onclick="editTask(event)"><i class="fa-solid fa-pen-to-square"></i> Edytuj</p>
+                            <p class="editOptionRemove" id="rmv${i}" onclick="removeTask(event)"><i class="fa-solid fa-trash"></i> Usuń</p>
+                        </div>
+                        <div class="optionssContainer" id="optionsContainer${i}">
+                            <div id="showOption${i}" class="showOption taskOptions" onclick="showMore(event)"><i class="fa-solid fa-eye" id="IkonOfShow${i}"></i></div>
+                            <div id="moreOption${i}" class="moreOption taskOptions" onclick="moreOptions(event)"><i class="fa-solid fa-sliders" id="IkonOfMore${i}"></i></div>
+                            <div id="doneOption${i}" class="doneOption taskOptions" onclick="moveToDone(event)"><i class="fa-solid fa-check" id="IkonOfDone${i}"></i></div>
+                        </div>
+                    </div>`;
 
-    let newTaskBlockSP = document.createElement('p');
-    newTaskBlockSP.id = "TaskDescribe"+i;
-    // newTaskBlockSP.style.display = 'none';
+        activeTask.innerHTML = output;
+        
 
-    
-    let ListOfSteps = document.createElement('ul');
-    ListOfSteps.id = 'ListOfSteps'+i;
-    ListOfSteps.classList.add('ListOfSteps');
-    // ListOfSteps.style.display = 'none';
-    
-    activeTask.appendChild(newTaskBlock);
-    document.getElementById('task'+i).appendChild(newTaskBlockFP);
-    document.getElementById('task'+i).appendChild(contentContainer);
+        newTaskWindow.style.display = 'none';
 
+        saveTasks();
 
-    document.getElementById('contentContainer'+i).appendChild(newTaskBlockSP);
-    document.getElementById('contentContainer'+i).appendChild(ListOfSteps);
-
-    document.getElementById('TaskTitle'+i).innerHTML = document.getElementById('newTaskTitle').value;
-    document.getElementById('TaskDescribe'+i).innerHTML = document.getElementById('opis').value;
-
-    let Tasklist = document.getElementById('kroki').value.trim();
-    if(Tasklist != ""){
-        let TaskListReady = Tasklist.split("\n");
-
-        for(const word of TaskListReady){
-            let ListOfStepsLi = document.createElement('li');
-            ListOfStepsLi.innerHTML = word;
-            document.getElementById('ListOfSteps'+i).appendChild(ListOfStepsLi);
-        }
+        document.getElementById('newTaskTitle').value = '';
+        document.getElementById('opis').value = '';
     }
-
-    //tworzenie menu edycji zadania
-
-    let editOptionsContainer = document.createElement('div');
-    let editOptionImportant = document.createElement('p');
-    let editOptionReallyImportant = document.createElement('p');
-    let editOptionEdition = document.createElement('p');
-    let editOptionRemove = document.createElement('p');
-
-    editOptionsContainer.classList.add('editOptionsContainer');
-    editOptionsContainer.id = 'editOptionsContainer'+i;
-    editOptionsContainer.style.display = 'none'
-
-    document.getElementById('task'+i).appendChild(editOptionsContainer);
-
-    editOptionImportant.classList.add('editOptionImportant');
-    editOptionImportant.id = 'eOI'+i;
-    editOptionImportant.innerHTML = '<i class="fa-solid fa-exclamation"></i> Ustaw jako ważne';
-    editOptionImportant.setAttribute('onclick', 'switchToImportant(event)');
-
-    document.getElementById('editOptionsContainer'+i).appendChild(editOptionImportant);
-
-    editOptionReallyImportant.classList.add('editOptionReallyImportant');
-    editOptionReallyImportant.id = 'eRI'+i;
-    editOptionReallyImportant.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> Ustaw jako bardzo ważne';
-    editOptionReallyImportant.setAttribute('onclick', 'switchToReallyImportant(event)');
-
-    document.getElementById('editOptionsContainer'+i).appendChild(editOptionReallyImportant);
-
-    editOptionEdition.classList.add('editOptionEdition');
-    editOptionEdition.id = 'edt'+i;
-    editOptionEdition.innerHTML = '<i class="fa-solid fa-pen-to-square"></i> Edytuj';
-
-    document.getElementById('editOptionsContainer'+i).appendChild(editOptionEdition);
-
-    editOptionRemove.classList.add('editOptionRemove');
-    editOptionRemove.id = 'rmv'+i;
-    editOptionRemove.innerHTML = '<i class="fa-solid fa-trash"></i> Usuń';
-    editOptionRemove.setAttribute('onclick', 'removeTask(event)');
-
-    document.getElementById('editOptionsContainer'+i).appendChild(editOptionRemove);
-    
-    
-    //tworzenie menu opcji w każdym nowym zadaniu
-    
-    let optionsContainer = document.createElement('div');
-    let showOption = document.createElement('div');
-    let moreOption = document.createElement('div');
-    let doneOption = document.createElement('div');
-
-    optionsContainer.id = 'optionsContainer'+i;
-    showOption.id = 'showOption'+i;
-    moreOption.id = 'moreOption'+i;
-    doneOption.id = 'doneOption'+i;
-
-    optionsContainer.classList.add('optionsContainer');
-    showOption.classList.add('showOption');
-    moreOption.classList.add('moreOption');
-    doneOption.classList.add('doneOption');
-
-    showOption.classList.add('taskOptions');
-    moreOption.classList.add('taskOptions');
-    doneOption.classList.add('taskOptions');
-
-    showOption.setAttribute('onclick', 'showMore(event)');
-    doneOption.setAttribute('onclick', 'moveToDone(event)');
-    moreOption.setAttribute('onclick', 'moreOptions(event)');
-
-    showOption.innerHTML = `<i class="fa-solid fa-eye" id="IkonOfShow${i}"></i>`
-    moreOption.innerHTML = `<i class="fa-solid fa-sliders" id="IkonOfMore${i}"></i>`
-    doneOption.innerHTML = `<i class="fa-solid fa-check" id="IkonOfDone${i}"></i>`
-
-    document.getElementById('task'+i).appendChild(optionsContainer);
-    document.getElementById('optionsContainer'+i).appendChild(showOption);
-    document.getElementById('optionsContainer'+i).appendChild(moreOption);
-    document.getElementById('optionsContainer'+i).appendChild(doneOption);
-
-
-    document.querySelector('#task'+i).style.height = document.querySelector('#task'+i).clientHeight + "px";
-    i++;
+    else{
+        console.log('Wybierz widok lub podaj tytuł');
+    }
 })
 
-function showMore(event){
+const showMore = (event) => {
     let actualClickTask = event.target.id.slice(10);
     let listSize = 0;
 
@@ -175,20 +111,50 @@ function showMore(event){
     }  
 }
 
-function moveToDone(event){
+const showMoreDone = (event) => {
+    let actualClickTask = event.target.id.slice(14);
+    let listSize = 0;
+
+
+    if(document.querySelector('#contentDoneContainer'+ actualClickTask).style.display != 'block'){
+        document.querySelector('#contentDoneContainer'+ actualClickTask).style.display = 'block';
+        
+        document.querySelector('#taskDone'+actualClickTask).style.height = (document.querySelector('#taskDone'+actualClickTask).clientHeight + document.querySelector('#contentDoneContainer'+actualClickTask).clientHeight + 16) + 'px';
+    }
+    else{
+        document.querySelector('#taskDone'+actualClickTask).style.height = (document.querySelector('#taskDone'+actualClickTask).clientHeight - (document.querySelector('#contentDoneContainer'+actualClickTask).clientHeight + 16)) + 'px';
+
+        document.querySelector('#contentDoneContainer'+ actualClickTask).style.display = 'none';
+        
+    }  
+}
+
+const moveToDone = (event) => {
     let actualClickTask = event.target.id.slice(10);
-    let actualTaskHTML = document.querySelector(`#task`+actualClickTask).innerHTML;
+    let actualTaskTitle = document.querySelector('#TaskTitle'+actualClickTask).innerHTML;
+    let actualTaskDescribe = document.querySelector('#TaskDescribe'+actualClickTask).innerHTML;
+    let output = document.getElementById('doneTask').innerHTML;
+    let i = document.querySelectorAll('.taskDone').length;
 
     activeTask.removeChild(document.getElementById('task'+actualClickTask));
 
-    let newDoneTask = document.createElement('div');
-    newDoneTask.id = 'task'+actualClickTask;
-    newDoneTask.classList.add('task');
-    newDoneTask.innerHTML = actualTaskHTML;
-    doneTask.appendChild(newDoneTask);
+    output += `  <div class="taskDone" id="taskDone${i}" style="height: 120px;">
+                    <p id="DoneTaskTitle${i}" class="DoneTaskTitle">${actualTaskTitle}</p>
+                    <div class="contentDoneContainer" id="contentDoneContainer${i}" style="display: none;">
+                        <p id="DoneTaskDescribe${i}" class="DoneTaskDescribe">${actualTaskDescribe}</p>
+                    </div>
+                    <div class="optionsDoneContainer" id="optionsDoneContainer${i}">
+                        <div id="showDoneOption${i}" class="showDoneOption taskDoneOptions" onclick="showMoreDone(event)"><i class="fa-solid fa-eye" id="IkonOfShowDone${i}"></i></div>
+                        <div id="deleteDoneOption${i}" class="deleteDoneOption taskDoneOptions" onclick="moveToDelete(event)"><i class="fa-solid fa-x" id="IkonOfDeleOption${i}"></i></div>
+                    </div>
+                </div>`;
+    
+    document.getElementById('doneTask').innerHTML = output;
+    saveTasks()
+    saveDoneTasks()
 }
 
-function moreOptions(event){
+const moreOptions = (event) => {
     let actualClickTask = event.target.id.slice(10);
     
     if(document.querySelector('#editOptionsContainer'+ actualClickTask).style.display != 'block'){
@@ -202,21 +168,112 @@ function moreOptions(event){
 
 }
 
-function switchToImportant(event){
+const switchToImportant = (event) => {
     let actualClickTask = event.target.id.slice(3);
     document.querySelector('#task'+actualClickTask).classList.remove('normal');
     document.querySelector('#task'+actualClickTask).classList.remove('reallyImportant');
     document.querySelector('#task'+actualClickTask).classList.add('important');
+
+    saveTasks();
 }
 
-function switchToReallyImportant(event){
+const switchToReallyImportant = (event) => {
     let actualClickTask = event.target.id.slice(3);
     document.querySelector('#task'+actualClickTask).classList.remove('normal');
     document.querySelector('#task'+actualClickTask).classList.remove('important');
     document.querySelector('#task'+actualClickTask).classList.add('reallyImportant');
+    
+    saveTasks();
 }
 
-function removeTask(event){
+const removeTask = (event) => {
     let actualClickTask = event.target.id.slice(3);
     activeTask.removeChild(document.querySelector('#task'+actualClickTask));
+
+    saveTasks();
+}
+
+//---------------------Wysuwane menu z dołu
+
+const showArrow = document.getElementById('showArrow');
+const optionsBlock = document.getElementById('LeftContainerOptions');
+
+showArrow.addEventListener('click', () => {
+    let actualHeight = parseInt(optionsBlock.style.height.slice(0, -2));
+    let removeViewBtn = document.getElementById('removeViewBtn');
+    let maxHeight;
+
+    if(removeViewBtn.style.display == 'block'){
+        maxHeight = 410;
+    }
+    else{
+        maxHeight = 350;
+    }
+
+    if(actualHeight == 40){
+        optionsBlock.style.height = maxHeight + 'px';
+        showArrow.style.transform = 'rotate(180deg)';
+    }
+    else if(actualHeight == maxHeight){
+        optionsBlock.style.height = '40px';
+        showArrow.style.transform = '';
+    }  
+})
+
+//---------------------Pokazywanie okna z tworzeniem nowego widoku
+
+const newViewWindow = document.getElementById('newViewWindow');
+const newViewBtn = document.getElementById('newView');
+
+newViewBtn.addEventListener('click', () => {
+
+    closeWindow('newTask');
+    closeWindow('editTask');
+
+    if(newViewWindow.style.display == 'none'){
+        newViewWindow.style.display = 'block';
+    }
+    else if(newViewWindow.style.display == 'block'){
+        newViewWindow.style.display = 'none';
+    }
+    document.getElementById('LeftContainerOptions').style.height = '40px';
+    document.getElementById('showArrow').style.transform = '';
+})
+
+//---------------------Edycja istniejącego zadania
+
+let actualClickTask;
+
+const editTask = (event) => {
+    actualClickTask = event.target.id.slice(3);
+    let actualTaskTitle = document.getElementById('TaskTitle'+actualClickTask).innerHTML;
+    let actualTaskDescribe = document.getElementById('TaskDescribe'+actualClickTask).innerHTML;
+    
+
+    editTaskWindow.style.display = 'block';
+
+    console.log(actualTaskTitle)
+
+    document.getElementById('editTaskTitle').value = actualTaskTitle;
+    document.getElementById('editTaskDesc').value = actualTaskDescribe;
+
+    closeWindow('newTask');
+    closeWindow('newViewWindow');
+}
+
+editBtn.addEventListener('click', () => {
+    document.getElementById('TaskTitle'+actualClickTask).innerHTML = document.getElementById('editTaskTitle').value;
+    document.getElementById('TaskDescribe'+actualClickTask).innerHTML = document.getElementById('editTaskDesc').value;
+
+    editTaskWindow.style.display = 'none';
+
+    actualClickTask = null;
+    saveTasks();
+})
+
+const moveToDelete = (event) => {
+    let actualClickTask = event.target.id.slice(16);
+    console.log(actualClickTask)
+    doneTask.removeChild(document.getElementById(`taskDone${actualClickTask}`));
+    saveDoneTasks();
 }

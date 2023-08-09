@@ -1,0 +1,124 @@
+body{
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    background-color: #151515;
+}
+
+#loginContainer{
+    width: 30%;
+    height: 85%;
+    border-radius: 20px;
+    background-color: #212121;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    min-width: 450px;
+    min-height: 800px;
+}
+
+#logo{
+    width: 270px;
+    height: 60px;
+    margin-top: 50px;
+}
+
+#logo > img{
+    width: 100%;
+    height: 100%;
+}
+
+#loginElements{
+    width: 60%;
+}
+
+#loginElements > p{
+    text-align: center;
+    color: white ;
+    font-family: 'Calibri';
+    font-size: 20px;
+}
+
+#loginForm{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 50px;
+    
+}
+
+.loginInput{
+    background: none;
+    border: none;
+    outline: none;
+    background-color: #151515;
+    margin: 10px 0;
+    padding: 20px 20px;
+    border-radius: 30px;
+    font-size: 20px;
+    color: white;
+    width: 100%;
+}
+
+#submitBtn{
+    background: none;
+    border: none;
+    outline: none;
+    padding: 20px 0;
+    width: 70%;
+    border-radius: 30px;
+    margin-top: 30px;
+    background-color: rgb(255, 255, 255);
+    font-size: 20px;
+    color: black;
+    font-weight: 500;
+    cursor: pointer;
+    /* border: solid 3px white; */
+    transition-duration: 500ms;
+}
+
+#submitBtn:hover{
+    background-color: #2a7fffff;
+    color: white;
+}
+
+#PPCheckbox{
+    width: 25px;
+    height: 25px;
+}
+
+#ChechBoxContainer{
+    margin-top: 40px;
+    text-align: center;
+}
+
+.CHB{
+    float: left;
+    margin: 0;
+    padding: 0;
+    width: 50%;
+}
+
+.CHB > p{
+    margin: 0;
+}
+
+#CHB1{
+    width: 10%;
+}
+
+#CHB2{
+    width: 90%;
+    color: white;
+    font-family: 'Calibri';
+    font-size: 20px;
+}
+
+#loginLink{
+    color: #2a7fffff;
+    text-decoration: none;
+}

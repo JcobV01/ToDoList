@@ -14,9 +14,12 @@ body{
     padding: 0;
     float: left;
     background-color: rgb(35, 35, 35);
-    display: flex;
+    /* display: flex;
     align-items: center;
-    flex-direction: column;
+    flex-direction: column; */
+    overflow: hidden;
+    min-width: 190px;
+    position: relative;
 }
 
 #rightPanel{
@@ -25,7 +28,12 @@ body{
     margin: 0;
     padding: 0;
     float: left;
-    background-color: rgb(255, 255, 255);
+    /* background-color: rgb(255, 255, 255); */
+
+    /* background-color: #e5e5f7;
+    opacity: 0.8;
+    background-size: 40px 40px;
+    background-image:  repeating-linear-gradient(0deg, #444cf7, #444cf7 1px, #e5e5f7 1px, #e5e5f7); */
 }
 
 #logo{
@@ -37,8 +45,27 @@ body{
     width: 60%;
 }
 
-#leftPanel > button > i{
-    color:rgb(234, 125, 0);
+#leftPanel > #LeftContainerOptions > button > i{
+    color:#2a7fffff;
+}
+
+#leftPanel > #LeftContainerOptions > form > button > i{
+    color:#2a7fffff;
+}
+
+#LeftContainerOptions{
+    position: absolute;
+    bottom: 10px;
+    text-align: center;
+    transition: height 0.5s ease-out;
+    overflow: hidden;
+}
+
+.fa-chevron-up,
+.fa-chevron-down{
+    font-size: 30px;
+    color:rgb(127, 127, 127);
+    cursor: pointer;
 }
 
 .actionBtn{
@@ -50,19 +77,28 @@ body{
     font-size: 18px;
     width: 100%;
     padding: 20px 0;
-    border-top-right-radius: 40px;
-    border-bottom-right-radius: 40px;
+    /* border-top-right-radius: 40px;
+    border-bottom-right-radius: 40px; */
     text-align: left;
     cursor: pointer;
-    transition-duration: 200ms;
+    transition-duration: 400ms;
 }
 
 .actionBtn:hover{
-    background-color: rgba(234, 125, 0, 0.654);
+    background-color: #2a7fff;
+}
+
+#leftPanel > #LeftContainerOptions > button:hover > i{
+    color: white;
+}
+
+#leftPanel > #LeftContainerOptions > form > button:hover > i{
+    color: white;
 }
 
 .fa-solid{
-    margin: 0 20px
+    margin: 0 20px;
+    transition-duration: 400ms;
 }
 
 #activeTask,
@@ -73,22 +109,42 @@ body{
     padding: 0;
     color: black;
     overflow: scroll;
+    background-color: #2d2d2d;
+    /* background-color: #2d2d2d92; */
+    /* opacity: 0.8; */
+    /* background-size: 26px 26px;
+    background-image:  repeating-linear-gradient(0deg, #444cf7, #444cf7 1.3px, #e5e5f7 1.3px, #e5e5f7); */
+    /* column-count: 4; */
+
 }
 
-#newTask{
+#activeTask::-webkit-scrollbar{
+    display: none;
+}
+
+#doneTask::-webkit-scrollbar{
+    display: none;
+}
+
+#newTask, #editTask{
     position: fixed;
     width: 30%;
-    height: 65%;
+    height: 55%;
     background-color: rgb(35, 35, 35);
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     border-radius: 20px;
-    text-align: center;
-    
+    text-align: center;  
 }
 
 #newTask > form{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+#editTask > form{
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -113,7 +169,17 @@ body{
     margin: 20px 0;
 }
 
+#editTask > p{
+    font-size: 30px;
+    font-weight: bold;
+    margin: 20px 0;
+}
+
 #newTask > form > input{
+    height: 40px;
+}
+
+#editTask > form > input{
     height: 40px;
 }
 
@@ -123,7 +189,13 @@ body{
     padding-top: 10px;
 }
 
-#submitBtn{
+#editTask > form > textarea{
+    resize: none;
+    height: 150px;
+    padding-top: 10px;
+}
+
+#submitBtn, #submitEditBtn{
     width: 40%;
     height: 70px;
     border-radius: 10px;
@@ -139,16 +211,21 @@ body{
 }
 
 #submitBtn:hover{
-    background-color: rgba(234, 125, 0, 0.654);
+    background-color: #2a7fff;
 }
 
-.contentContainer{
+#submitEditBtn:hover{
+    background-color: #2a7fff;
+}
+
+.contentContainer, .contentDoneContainer{
     padding-left: 15px;
 }
 
 .task{
-    width: 25%;
-    background-color: black;
+    width: calc(25% - 40px);
+    /* width: calc(100% - 40px); */
+    background-color: rgb(22, 25, 31);
     display: inline-block;
     margin: 10px;
     border-radius: 10px;
@@ -156,6 +233,21 @@ body{
     overflow: hidden;
     /* transition-duration: 500ms; */
     transition: 0.3s ease-out;
+    min-width: 280px;
+}
+
+.taskDone{
+    width: calc(25% - 30px);
+    background-color: rgb(22, 25, 31);
+    display: inline-block;
+    margin: 10px;
+    border-radius: 10px;
+    color: white;
+    overflow: hidden;
+    transition: 0.3s ease-out;
+    min-width: 280px;
+    border-left: solid 7px #2a7fff;
+    border-right: solid 7px #2a7fff;
 }
 
 .task > p,
@@ -165,11 +257,24 @@ body{
     transition: display 0.5s ease-out;
 }
 
-.ListOfSteps{
-    word-wrap: break-word;
+.taskDone > p,
+.taskDone > ul{
+    margin-left: 15px; 
+    margin-right: 15px;
+    transition: display 0.5s ease-out;
 }
 
-.optionsContainer{
+.TaskTitle{
+    overflow:scroll;
+    height: 31px;
+}
+
+.TaskTitle::-webkit-scrollbar{
+    display: none;
+}
+
+
+.optionsContainer, .optionsDoneContainer{
     width: 100%;
 }
 
@@ -183,15 +288,24 @@ body{
     cursor: pointer;
 }
 
-.taskOptions:hover{
-    background-color: rgba(234, 125, 0, 0.654);
+.taskDoneOptions{
+    float: left;
+    width: 50%;
+    margin: 0 0;
+    padding: 10px 0;
+    text-align: center;
+    transition-duration: 200ms;
+    cursor: pointer;
 }
 
-.TaskTitle{
-    font-size: 25px;
+.taskOptions:hover, .taskDoneOptions:hover{
+    background-color: #2a7fff;
+}
+
+.TaskTitle, .DoneTaskTitle{
+    font-size: 1.5rem;
     font-weight: bold;
 }
-
 
 .editOptionsContainer{
     /* text-align: center; */
@@ -211,18 +325,173 @@ body{
 }
 
 .editOptionsContainer > p:hover{
-    background-color: rgba(234, 125, 0, 0.654);
+    background-color: #2a7fff;
 }
 
 .normal{
     border-left: solid 7px #0f5800;
+    border-right: solid 7px #0f5800;
 }
 
 .important{
     border-left: solid 7px #e68200;
+    border-right: solid 7px #e68200;
 }
 
 .reallyImportant{
     border-left: solid 7px #b90000;
+    border-right: solid 7px #b90000;
 }
 
+
+#userContainer{
+    margin-top: 10px;
+}
+
+#logoContainer{
+    margin: 0;
+    padding: 15px;
+    display: flex;
+    justify-content: center;
+}
+
+#loginContainer{
+    margin: 0;
+    padding: 0 0;
+    font-size: 25px;
+    font-weight: 500;
+    overflow-x: hidden;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+#loginContainer > p{
+    margin: 0;
+    font-family: Arial;
+    font-weight: 600;
+}
+
+#userLogo{
+    border-radius: 50%;
+    background-color: #0f5800;
+    width: 90px;
+    height: 90px;
+    border: solid 2px #2a7fffff;
+    background-image: url('logoKrotsze.png');
+    background-size: cover;
+}
+
+#endOfProfile{
+    width: 70%;
+    color: #2E2E2E;
+    border: none;
+    border: 1px solid #2E2E2E;
+    margin-top: 0;
+}
+
+#startOfOptions{
+    width: 70%;
+    color: #2E2E2E;
+    border: none;
+    border: 1px solid #2E2E2E;
+    margin-top: 0;
+}
+
+/*Nowy widok - okno*/
+
+#newViewWindow{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 50px; 
+    width: 30%;
+    height: 15%;
+    background-color: rgb(35, 35, 35);
+    border-radius: 20px;
+    text-align: center;
+    min-width: 480px;
+}
+
+#newViewWindow > input{
+    width: 90%;
+    background-color: #1a1a1a;
+    padding: 10px 5%;
+    color: white;
+    border-radius: 20px;
+    font-size: 20px;
+    outline: 0;
+    border: 0;
+}
+
+#setNewView{
+    width: 40%;
+    padding: 20px 10px;
+    color: white;
+    margin-top: 5%;
+    font-size: 20px;
+    background-color: #1a1a1a;
+    border-radius: 20px;
+    outline: none;
+    border: none;
+    cursor: pointer;
+    transition-duration: 400ms;
+}
+
+#setNewView:hover{
+    background-color: #2a7fffff;
+}
+
+/*lista plików*/
+
+#fileList{
+    width: 100%;
+    height: 50%;
+    overflow-x: scroll;
+}
+
+#fileList::-webkit-scrollbar{
+    display: none;
+}
+
+.fileListComponent{
+    background-color: #1a1a1a;
+    text-align: center;
+    border-radius: 20px;
+    margin: 20px 0;
+    padding: 10px 20px;
+    width: 70%;
+    cursor: pointer;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.fileListComponentActive{
+    background-color: #2a7fffff;
+}
+
+.activeView{
+    background-color: #2a7fff;
+}
+
+#emptyTaskPanel{
+    font-size: 1000%;
+    color:rgb(59, 59, 59);
+    font-family: 'Calibri';
+    text-align: center;
+    position: fixed;
+    margin-left: 25%;
+    margin-right: 25%;
+}
+
+#emptyListOfFile{
+    font-size: 150%;
+    text-align: center;
+    font-family: 'Calibri';
+    color:rgb(59, 59, 59);
+}
+
+.fa-exclamation{
+    text-align:right;
+}
